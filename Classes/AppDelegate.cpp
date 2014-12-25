@@ -4,6 +4,9 @@
 
 USING_NS_CC;
 
+#define WIDTH  809
+#define HEIGHT 500
+
 AppDelegate::AppDelegate() {}
 AppDelegate::~AppDelegate() {}
 
@@ -18,7 +21,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("SAKOPIN");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		glview = GLViewImpl::createWithRect("SAKOPIN", Rect(0,0,WIDTH,HEIGHT));
+#else
+		glview = GLViewImpl::create("SAKOPIN");
+#endif
         director->setOpenGLView(glview);
     }
 

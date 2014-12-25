@@ -2,6 +2,7 @@
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "HelloWorldScene.h"
+#include "GameScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -25,15 +26,23 @@ bool HelloWorld::init()
 	Vec2 org = director->getVisibleOrigin();
 
 	auto node = (cocos2d::Node*)loader->createNodeWithFlatBuffersFile("MainScene.csb");
-	//node->setName("NODE");	// 名前つけなくていい気がする
 	this->addChild(node);
 
-	// 縦横比を調整する
-	float dispRatio = vsize.width / vsize.height;
-	float nodeRatio = node->getContentSize().width / node->getContentSize().height;
+	// 表示位置、大きさを調整する
 	float vmag = vsize.width / node->getContentSize().width;
 	float hmag = vsize.height / node->getContentSize().height;
-	node->setScale(min({vmag, hmag}));
+	if (vmag > hmag) {
+		node->setScale( hmag );
+		float width = node->getContentSize().width * hmag;
+		float clack = (vsize.width - width) / 2;
+		node->setPosition(Vec2(clack, 0));
+	}
+	else {
+		node->setScale(vmag);
+		float height = node->getContentSize().height * vmag;
+		float clack = (vsize.height - height) / 2;
+		node->setPosition(Vec2(0, clack));
+	}
 
 	// 終了ボタン押下時のアクション
 	auto touchQuit = [this, director](Ref* pSender, ui::Widget::TouchEventType type){
@@ -45,7 +54,7 @@ bool HelloWorld::init()
 	// スタートボタン押下時のアクション
 	auto touchStart = [this, director](Ref* pSender, ui::Widget::TouchEventType type){
 		if (type == ui::Widget::TouchEventType::ENDED) {
-			director->replaceScene(HelloWorld::createScene());
+			director->replaceScene(GameScene::createScene());
 		}
 	};
 
