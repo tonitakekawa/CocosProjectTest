@@ -25,7 +25,7 @@ bool GameScene::init()
 	Size vsize = director->getVisibleSize();
 	Vec2 org = director->getVisibleOrigin();
 
-	auto node = (cocos2d::Node*)loader->createNodeWithFlatBuffersFile("MainScene.csb");
+	auto node = (cocos2d::Node*)loader->createNodeWithFlatBuffersFile("GameScene.csb");
 	//node->setName("NODE");	// 名前つけなくていい気がする
 	this->addChild(node);
 
@@ -47,25 +47,15 @@ bool GameScene::init()
 		node->setPosition(Vec2(0, clack));
 	}
 
-	// 終了ボタン押下時のアクション
-	auto touchQuit = [this, director](Ref* pSender, ui::Widget::TouchEventType type){
-		if (type == ui::Widget::TouchEventType::ENDED) {
-			director->end();
-		}
-	};
-
-	// スタートボタン押下時のアクション
-	auto touchStart = [this, director](Ref* pSender, ui::Widget::TouchEventType type){
+	// 戻るボタン押下時のアクション
+	auto touchReturn = [this, director](Ref* pSender, ui::Widget::TouchEventType type){
 		if (type == ui::Widget::TouchEventType::ENDED) {
 			director->replaceScene(HelloWorld::createScene());
 		}
 	};
 
-	auto QuitBtn = (cocos2d::ui::Widget*)node->getChildByName("BTN");
-	QuitBtn->addTouchEventListener(touchQuit);
-
-	auto startBtn = (cocos2d::ui::Widget*)node->getChildByName("START");
-	startBtn->addTouchEventListener(touchStart);
+	auto ReturnBtn = (cocos2d::ui::Widget*)node->getChildByName("RETURN");
+	ReturnBtn->addTouchEventListener(touchReturn);
 
     return true;
 }
